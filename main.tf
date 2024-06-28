@@ -30,20 +30,22 @@ resource "aws_instance" "main" {
     Name = "main"
   }
 
+  iam_instance_profile = "test_profile"
+
   depends_on = [aws_internet_gateway.main]
 
   user_data = file("bootstrap.sh")
 }
 
-resource "aws_network_interface" "main" {
-  subnet_id       = aws_subnet.main.id
-  security_groups = [aws_security_group.main.id]
+# resource "aws_network_interface" "main" {
+#   subnet_id       = aws_subnet.main.id
+#   security_groups = [aws_security_group.main.id]
 
-  attachment {
-    instance     = aws_instance.main.id
-    device_index = 1
-  }
-}
+#   attachment {
+#     instance     = aws_instance.main.id
+#     device_index = 1
+#   }
+# }
 
 # resource "aws_eip" "main" {
 #   domain = "vpc"
