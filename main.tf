@@ -37,6 +37,29 @@ resource "aws_instance" "main" {
   user_data = file("bootstrap.sh")
 }
 
+resource "aws_instance" "main1" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.main.id
+
+  vpc_security_group_ids = [aws_security_group.main.id]
+
+  associate_public_ip_address = true
+
+  availability_zone = "us-east-1a"
+  key_name          = "terraformkey"
+
+  tags = {
+    Name = "main1"
+  }
+
+  iam_instance_profile = "test_profile"
+
+  depends_on = [aws_internet_gateway.main]
+
+  user_data = file("bootstrap.sh")
+}
+
 # resource "aws_network_interface" "main" {
 #   subnet_id       = aws_subnet.main.id
 #   security_groups = [aws_security_group.main.id]
@@ -88,7 +111,7 @@ resource "aws_instance" "amazon" {
   key_name          = "terraformkey"
 
   tags = {
-    Name = "main"
+    Name = "amazon"
   }
 
   iam_instance_profile = "test_profile"
